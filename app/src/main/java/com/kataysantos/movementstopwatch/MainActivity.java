@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        
+
         initComponents();
     }
 
@@ -58,11 +58,14 @@ public class MainActivity extends AppCompatActivity {
         clockTextView = (TextView) findViewById(R.id.content_main_text_clock);
         clockTextView.setText(stopWatch.toString());
 
+        Button buttonReset = (Button) findViewById(R.id.content_main_button_reset);
         Button buttonStart = (Button) findViewById(R.id.content_main_button_start_stop);
         StopWatchLoop loop = new StopWatchLoop(this, stopWatch);
         new Thread(loop).start();
+        ResetButtonListener resetButtonListener = new ResetButtonListener(stopWatch, clockTextView, buttonReset);
         StartStopButtonListener buttonListener = new StartStopButtonListener(stopWatch, clockTextView, buttonStart);
         buttonStart.setOnClickListener(buttonListener);
+        buttonReset.setOnClickListener(resetButtonListener);
     }
 
     @Override
@@ -109,6 +112,27 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    private static class ResetButtonListener implements  View.OnClickListener{
+
+        private final StopWatch stopWatch;
+        private final Button button;
+        private final TextView clockTextView;
+
+        public  ResetButtonListener(StopWatch stopWatch,TextView clockTextView, Button b){
+            this.clockTextView = clockTextView;
+            this.stopWatch = stopWatch;
+            this.button = b;
+
+        }
+
+        @Override
+        public void onClick(View v) {
+                stopWatch.reset();
+                clockTextView.setText("00:00:00.00");
+
         }
     }
 
