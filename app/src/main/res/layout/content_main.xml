@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_main"
@@ -9,6 +9,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.kataysantos.movementstopwatch.MainActivity"
     tools:showIn="@layout/activity_main">
@@ -20,25 +22,37 @@
         android:text="00:00:00.00"
         android:textSize="60dp"
         android:textAlignment="center"
-        android:layout_alignParentEnd="true" />
+        android:textColor="#FFFFFF"/>
 
-    <Button
-        android:id="@+id/content_main_button_start_stop"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/start"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="168dp" />
+        android:gravity="center_horizontal">
+        <Button
+            android:id="@+id/content_main_button_reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reset" />
+        <Button
+            android:id="@+id/content_main_button_start_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start"/>
+        <Button
+            android:text="Lap"
+            android:layout_marginLeft="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/content_main_button_lap"
+            android:onClick="testButton" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/content_main_button_reset"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reset"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="62dp"
-        android:layout_alignTop="@+id/content_main_button_start_stop"
-        android:layout_alignParentStart="true" />
 
-</RelativeLayout>
+    <ListView
+        android:id="@+id/content_main_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"/>
+
+</LinearLayout>

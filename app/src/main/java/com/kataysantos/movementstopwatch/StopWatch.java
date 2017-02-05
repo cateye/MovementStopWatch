@@ -73,7 +73,7 @@ public class StopWatch {
 
         public String toString() {
             //return String.format("%02d:%02d:%02d.%d", hours, minutes, secs, millisecs);
-            return hours + ":" + minutes + ":" + secs + "." + millisecs;
+            return hours + ":" + minutes + ":" + secs + "." + (millisecs % 10);
         }
     }
 
