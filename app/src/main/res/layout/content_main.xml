@@ -48,11 +48,10 @@
             android:onClick="testButton" />
     </LinearLayout>
 
-
     <ListView
         android:id="@+id/content_main_listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#000000"/>
+        android:layout_height="400dp"
+        android:background="#FFFFFF"/>
 
 </LinearLayout>
