@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -17,7 +18,7 @@ class LapAdapter extends ArrayAdapter<StopWatch.Time> {
 
     private static Logger LOG = Logger.getLogger("LapAdapter");
     LapAdapter(Context context) {
-        super(context, 0);
+        super(context, 0, new ArrayList<StopWatch.Time>());
     }
 
     @Override
@@ -29,11 +30,17 @@ class LapAdapter extends ArrayAdapter<StopWatch.Time> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.timelapsed_list_item, parent, false);
         }
         TextView timeLapsed = (TextView) convertView.findViewById(R.id.timelapsed_list_lapsedTime_textView);
-        timeLapsed.setText((CharSequence) lap);
+        timeLapsed.setText((CharSequence) lap.toString());
 
         return convertView;
     }
 
+    @Override
+    public void add(StopWatch.Time object) {
+        super.add(object);
+        notifyDataSetChanged();
+        LOG.info("added object, new count -> " + getCount());
+    }
 
     @Override
     public boolean areAllItemsEnabled() {
@@ -47,12 +54,12 @@ class LapAdapter extends ArrayAdapter<StopWatch.Time> {
 
     @Override
     public void registerDataSetObserver(DataSetObserver observer) {
-
+        observer.onChanged();
     }
 
     @Override
     public void unregisterDataSetObserver(DataSetObserver observer) {
-
+       LOG.info("unresigerDataSetObserver");
     }
 
     @Override

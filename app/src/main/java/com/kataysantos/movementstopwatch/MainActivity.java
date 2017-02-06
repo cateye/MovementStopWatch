@@ -3,19 +3,16 @@ package com.kataysantos.movementstopwatch;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-
     private final StopWatch stopWatch = new StopWatch();
     private TextView clockTextView;
-    private ListView listView;
-    private LapAdapter lapAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,25 +49,21 @@ public class MainActivity extends AppCompatActivity {
     private void initComponents() {
         clockTextView = (TextView) findViewById(R.id.content_main_text_clock);
         clockTextView.setText(stopWatch.toString());
-        listView = (ListView) findViewById(R.id.content_main_listview);
-        lapAdapter = new LapAdapter(this);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                listView.setAdapter(lapAdapter);
-            }
-        });
+        ListView listView = (ListView) findViewById(R.id.content_main_listview);
+        LapAdapter lapAdapter = new LapAdapter(this);
         Button buttonReset = (Button) findViewById(R.id.content_main_button_reset);
         Button buttonStart = (Button) findViewById(R.id.content_main_button_start_stop);
         Button buttonLap = (Button) findViewById(R.id.content_main_button_lap);
         StopWatchLoop loop = new StopWatchLoop(this, stopWatch);
         new Thread(loop).start();
-        ResetButtonListener resetButtonListener = new ResetButtonListener(stopWatch, clockTextView, buttonReset);
-        StartStopButtonListener buttonListener = new StartStopButtonListener(stopWatch, clockTextView, buttonStart);
+        ResetButtonListener resetButtonListener = new ResetButtonListener(stopWatch, clockTextView);
+        StartStopButtonListener buttonListener = new StartStopButtonListener(stopWatch, buttonStart);
         LapButtonListener lapButtonListener = new LapButtonListener(stopWatch, lapAdapter, listView);
         buttonStart.setOnClickListener(buttonListener);
         buttonReset.setOnClickListener(resetButtonListener);
         buttonLap.setOnClickListener(lapButtonListener);
+
+        listView.setAdapter(lapAdapter);
     }
 
     @Override
@@ -100,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         private final StopWatch stopWatch;
         private final MainActivity mainActivity;
 
+
         StopWatchLoop(MainActivity mainActivity, StopWatch stopWatch) {
             this.mainActivity = mainActivity;
             this.stopWatch = stopWatch;
@@ -124,31 +118,27 @@ public class MainActivity extends AppCompatActivity {
     private static class ResetButtonListener implements  View.OnClickListener{
 
         private final StopWatch stopWatch;
-        private final Button button;
         private final TextView clockTextView;
 
-        ResetButtonListener(StopWatch stopWatch, TextView clockTextView, Button b){
+        ResetButtonListener(StopWatch stopWatch, TextView clockTextView){
             this.clockTextView = clockTextView;
             this.stopWatch = stopWatch;
-            this.button = b;
         }
 
         @Override
         public void onClick(View v) {
-                stopWatch.reset();
-                clockTextView.setText("00:00:00.0");
+            stopWatch.reset();
+            clockTextView.setText("00:00:00.0");
         }
     }
 
     private static class StartStopButtonListener implements View.OnClickListener, View.OnLongClickListener {
 
         private final StopWatch stopWatch;
-        private final TextView clockTextView;
         private final Button button;
 
-        StartStopButtonListener(StopWatch stopWatch, TextView clockTextView, Button b) {
+        StartStopButtonListener(StopWatch stopWatch, Button b) {
             this.stopWatch = stopWatch;
-            this.clockTextView = clockTextView;
             this.button = b;
         }
 
@@ -170,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private static class LapButtonListener implements View.OnClickListener {
+    private class LapButtonListener implements View.OnClickListener {
         private final LapAdapter lapAdapter;
         private final StopWatch stopWatch;
         private final ListView listView;
@@ -184,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             lapAdapter.add(stopWatch.getTime());
-            listView.invalidate();
+            listView.invalidateViews();
         }
     }
 }
