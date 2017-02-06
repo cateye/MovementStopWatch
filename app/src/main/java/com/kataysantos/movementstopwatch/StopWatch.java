@@ -71,9 +71,12 @@ public class StopWatch {
             return millisecs + (secs * 1000) + (minutes * 60 * 1000) + (hours * 60 * 60 * 1000);
         }
 
+        private String twoDigits(int n) {
+            return (n < 10 ? "0" : "") + String.valueOf(n);
+        }
+
         public String toString() {
-            //return String.format("%02d:%02d:%02d.%d", hours, minutes, secs, millisecs);
-            return hours + ":" + minutes + ":" + secs + "." + (millisecs % 10);
+            return twoDigits(hours) + ":" + twoDigits(minutes) + ":" + twoDigits(secs) + "." + twoDigits(millisecs % 100);
         }
     }
 
