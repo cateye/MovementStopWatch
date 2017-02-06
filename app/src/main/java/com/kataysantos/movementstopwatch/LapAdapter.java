@@ -18,7 +18,7 @@ class LapAdapter extends ArrayAdapter<StopWatch.Time> {
 
     private static Logger LOG = Logger.getLogger("LapAdapter");
     LapAdapter(Context context) {
-        super(context, 0, new ArrayList<StopWatch.Time>());
+        super(context, 0);
     }
 
     @Override
