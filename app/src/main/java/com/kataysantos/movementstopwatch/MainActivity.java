@@ -10,9 +10,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements StopWatchLoopController {
     private final StopWatch stopWatch = new StopWatch();
     private TextView clockTextView;
+    private StopWatchLoop stopWatchLoop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +49,8 @@ public class MainActivity extends AppCompatActivity {
         Button buttonReset = (Button) findViewById(R.id.content_main_button_reset);
         Button buttonStart = (Button) findViewById(R.id.content_main_button_start_stop);
         Button buttonLap = (Button) findViewById(R.id.content_main_button_lap);
-        StopWatchLoop loop = new StopWatchLoop(this, stopWatch);
-        new Thread(loop).start();
-        ResetButtonListener resetButtonListener = new ResetButtonListener(stopWatch, clockTextView);
-        StartStopButtonListener buttonListener = new StartStopButtonListener(stopWatch, buttonStart);
+        ResetButtonListener resetButtonListener = new ResetButtonListener(stopWatch, clockTextView, this);
+        StartStopButtonListener buttonListener = new StartStopButtonListener(stopWatch, buttonStart, this);
         LapButtonListener lapButtonListener = new LapButtonListener(stopWatch, lapAdapter, listView);
         buttonStart.setOnClickListener(buttonListener);
         buttonReset.setOnClickListener(resetButtonListener);
@@ -59,6 +58,16 @@ public class MainActivity extends AppCompatActivity {
 
         listView.setAdapter(lapAdapter);
     }
+
+    public void startStopWatchLoop() {
+        stopWatchLoop = new StopWatchLoop(this, stopWatch);
+        new Thread(stopWatchLoop).start();
+    }
+
+    public void stopStopWatchLoop() {
+        stopWatchLoop.stop();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -82,75 +91,49 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private static class StopWatchLoop implements Runnable {
-        private final static long SLEEP_TIME = 75;
-        private final StopWatch stopWatch;
-        private final MainActivity mainActivity;
-
-
-        StopWatchLoop(MainActivity mainActivity, StopWatch stopWatch) {
-            this.mainActivity = mainActivity;
-            this.stopWatch = stopWatch;
-
-        }
-
-        @Override
-        public void run() {
-            while (true) {
-                try {
-                    Thread.sleep(SLEEP_TIME);
-                    if (!stopWatch.isPaused()) {
-                        mainActivity.updateOnTime(stopWatch.getTime());
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
     private static class ResetButtonListener implements  View.OnClickListener{
 
         private final StopWatch stopWatch;
         private final TextView clockTextView;
+        private final StopWatchLoopController loopController;
 
-        ResetButtonListener(StopWatch stopWatch, TextView clockTextView){
+        ResetButtonListener(StopWatch stopWatch, TextView clockTextView, StopWatchLoopController loopController){
             this.clockTextView = clockTextView;
             this.stopWatch = stopWatch;
+            this.loopController = loopController;
         }
 
         @Override
         public void onClick(View v) {
             stopWatch.reset();
             clockTextView.setText("00:00:00.0");
+            loopController.stopStopWatchLoop();
         }
     }
 
-    private static class StartStopButtonListener implements View.OnClickListener, View.OnLongClickListener {
+    private static class StartStopButtonListener implements View.OnClickListener {
 
         private final StopWatch stopWatch;
         private final Button button;
+        private final StopWatchLoopController loopController;
 
-        StartStopButtonListener(StopWatch stopWatch, Button b) {
+        StartStopButtonListener(StopWatch stopWatch, Button b, StopWatchLoopController loopController) {
             this.stopWatch = stopWatch;
             this.button = b;
+            this.loopController = loopController;
         }
 
         @Override
         public void onClick(View v) {
             if (stopWatch.isPaused()) {
+                loopController.startStopWatchLoop();
                 stopWatch.start();
                 button.setText(R.string.stop);
             } else {
                 stopWatch.pause();
                 button.setText(R.string.start);
+                loopController.stopStopWatchLoop();
             }
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            stopWatch.reset();
-            return true;
         }
     }
 
