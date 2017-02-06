@@ -28,22 +28,16 @@ public class MainActivity extends AppCompatActivity {
         initComponents();
     }
 
-    private static String twoDigits(int n) {
-        return (n < 10 ? "0" : "") + String.valueOf(n);
-    }
-
     public void updateOnTime(final StopWatch.Time time) {
         if (clockTextView == null) {
             return;
         }
-        final String timeString = twoDigits(time.hours) + ":" + twoDigits(time.minutes) + ":" + twoDigits(time.secs) + "." + (time.millisecs % 10);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                clockTextView.setText(timeString);
+                clockTextView.setText(time.toString());
             }
         });
-
     }
 
     private void initComponents() {
