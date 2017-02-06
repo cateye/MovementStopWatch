@@ -36,13 +36,6 @@ class LapAdapter extends ArrayAdapter<StopWatch.Time> {
     }
 
     @Override
-    public void add(StopWatch.Time object) {
-        super.add(object);
-        notifyDataSetChanged();
-        LOG.info("added object, new count -> " + getCount());
-    }
-
-    @Override
     public boolean areAllItemsEnabled() {
         return true;
     }
