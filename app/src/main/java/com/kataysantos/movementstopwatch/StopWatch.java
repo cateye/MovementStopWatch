@@ -1,5 +1,6 @@
 package com.kataysantos.movementstopwatch;
 
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 
 /**
@@ -30,6 +31,11 @@ public class StopWatch {
         isPaused = true;
     }
 
+    public boolean isReset() {
+        return isPaused && totalTime == 0;
+    }
+
+
     public Time getTime() {
         if (!isPaused) {
             return Time.fromMillis(totalTime + (SystemClock.elapsedRealtime() - startTime));
@@ -39,6 +45,27 @@ public class StopWatch {
 
     public String toString() {
         return getTime().toString();
+    }
+
+    void warmUp(final long millisecs, final WarmUpListener listener) {
+        new CountDownTimer(millisecs, 100) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                long millisNormalized = (long) (Math.ceil((double)(millisUntilFinished/1000))*1000);
+                try {
+                    if (listener != null) {
+                        listener.onTick(Time.fromMillis(millisNormalized));
+                    }
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                listener.onFinish();
+            }
+        }.start();
     }
 
     public static class Time {
@@ -76,13 +103,13 @@ public class StopWatch {
         }
 
         public String toString() {
-            return twoDigits(hours) + ":" + twoDigits(minutes) + ":" + twoDigits(secs) + "." + twoDigits(millisecs % 100);
+            return (hours > 0 ? twoDigits(hours) + ":" : "") + twoDigits(minutes) + ":" + twoDigits(secs) + "." + (millisecs % 10);
         }
     }
 
     private static void testForNSeconds(int seconds) {
         long now = SystemClock.elapsedRealtime();
-        long end = now + seconds*1000;
+        long end = now + seconds * 1000;
         StopWatch watch = new StopWatch();
         watch.start();
         while (now < end) {

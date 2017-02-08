@@ -15,12 +15,30 @@
     tools:context="com.kataysantos.movementstopwatch.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layout_width="match_parent">
+
+        <ImageView
+            android:layout_gravity="right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/metronome"
+            android:onClick="metronome"
+            android:id="@+id/content_main_metronomeButton" />
+    </LinearLayout>
+
+
+
+
     <TextView
         android:id="@+id/content_main_text_clock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="00:00:00.00"
-        android:textSize="60dp"
+        android:text="00:00.0"
+        android:textSize="75dp"
         android:textAlignment="center"
         android:textColor="#FFFFFF"/>
 
@@ -41,17 +59,19 @@
             android:text="@string/start"/>
         <Button
             android:text="Lap"
-            android:layout_marginLeft="50dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/content_main_button_lap"
-            android:onClick="testButton" />
+            android:id="@+id/content_main_button_lap"/>
     </LinearLayout>
 
     <ListView
         android:id="@+id/content_main_listview"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:background="#FFFFFF"/>
+        android:background="#FFFFFF"
+        android:visibility="gone"/>
+
+
+
 
 </LinearLayout>

@@ -23,6 +23,7 @@ public class StopWatchLoop implements Runnable {
                 Thread.sleep(SLEEP_TIME);
                 if (!stopWatch.isPaused()) {
                     mainActivity.updateOnTime(stopWatch.getTime());
+
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
