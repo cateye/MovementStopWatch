@@ -2,6 +2,7 @@ package com.kataysantos.movementstopwatch;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,6 +18,8 @@ public class MainActivity extends AppCompatActivity implements StopWatchLoopCont
     private final StopWatch stopWatch = new StopWatch();
     private TextView clockTextView;
     private StopWatchLoop stopWatchLoop;
+    private long lastMetronomeBeep = -1;
+    private final Metronome metronome = new Metronome(0.1, 1103);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +42,24 @@ public class MainActivity extends AppCompatActivity implements StopWatchLoopCont
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                playMetronomeBeep();
                 clockTextView.setText(time.toString());
             }
         });
+    }
+
+    private void playMetronomeBeep() {
+        // TODO: skip playback if metronome off.
+        // if (metronome is disabled) {
+        //     return;
+        // }
+
+        if (lastMetronomeBeep == -1 || SystemClock.elapsedRealtime() - lastMetronomeBeep >= 1000) {
+            if (lastMetronomeBeep != -1) {
+                metronome.play();
+            }
+            lastMetronomeBeep = SystemClock.elapsedRealtime();
+        }
     }
 
     private void initComponents() {
@@ -75,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements StopWatchLoopCont
         if (stopWatchLoop != null) {
             stopWatchLoop.stop();
         }
+        lastMetronomeBeep = -1;
     }
 
     @Override
@@ -118,20 +137,33 @@ public class MainActivity extends AppCompatActivity implements StopWatchLoopCont
     }
 
     private static class StartStopButtonListener implements View.OnClickListener {
-
         private final StopWatch stopWatch;
         private final Button button;
         private final StopWatchLoopController loopController;
         private final TextView clockTextView;
+        private final Metronome lowBeep = new Metronome(0.15, 547);
+        private final Metronome highBeep = new Metronome(0.15, 1103);
+        private long lastPlayedBeep = -1;
         private final WarmUpListener warmupListener = new WarmUpListener() {
             @Override
             public void onTick(StopWatch.Time timeUntilFinished) {
+                if (lastPlayedBeep == -1 || SystemClock.elapsedRealtime() - lastPlayedBeep >= 1000) {
+                    // skip first beep, otherwise it does an extra one.
+                    if (lastPlayedBeep != -1) {
+                        lowBeep.play();
+                    }
+                    lastPlayedBeep = SystemClock.elapsedRealtime();
+                }
                 clockTextView.setText(timeUntilFinished.toString());
             }
 
             @Override
             public void onFinish() {
+                String threadName = Thread.currentThread().getName();
+                System.out.println("WarmupListener.onFinish() -> on what thread am I? " + threadName);
                 startLoopAndStopWatch();
+                highBeep.play();
+                lastPlayedBeep = -1;
             }
         };
 
@@ -197,8 +229,6 @@ public class MainActivity extends AppCompatActivity implements StopWatchLoopCont
 
         @Override
         public void onClick(View v) {
-            MediaPlayer mPlayer = MediaPlayer.create(mainActivity, R.raw.beep);
-            mPlayer.start();
         }
     }
 }
