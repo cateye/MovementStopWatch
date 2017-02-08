@@ -1,10 +1,9 @@
 package com.kataysantos.movementstopwatch;
-
 /**
- * Created by katay on 2/7/17.
+ * @author gubatron
+ * @since 02/07/2017
  */
-public interface WarmUpListener {
+interface WarmUpListener {
     void onTick(StopWatch.Time timeUntilFinished);
-
     void onFinish();
 }

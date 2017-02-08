@@ -18,7 +18,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="end"
         android:layout_width="match_parent">
 
         <ImageView
@@ -27,11 +27,8 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/metronome"
             android:onClick="metronome"
-            android:id="@+id/content_main_metronomeButton" />
+            android:id="@+id/content_main_metronomeButton"/>
     </LinearLayout>
-
-
-
 
     <TextView
         android:id="@+id/content_main_text_clock"

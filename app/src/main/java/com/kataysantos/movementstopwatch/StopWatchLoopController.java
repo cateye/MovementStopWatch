@@ -1,10 +1,10 @@
 package com.kataysantos.movementstopwatch;
 
 /**
- * Created by gubatron on 2/5/17.
+ * @author gubatron
+ * @since 02/05/2017
  */
-
-public interface StopWatchLoopController {
+interface StopWatchLoopController {
     void startStopWatchLoop();
     void stopStopWatchLoop();
 }

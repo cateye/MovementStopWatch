@@ -4,37 +4,38 @@ import android.os.CountDownTimer;
 import android.os.SystemClock;
 
 /**
- * Created by katay on 1/31/17.
+ * @author Katay
+ * @author gubatron
+ * @since 01/31/2017
  */
 public class StopWatch {
     private long startTime; // start timestamp from currentTimeMillis().
     private boolean isPaused = true;
     private long totalTime = 0; // time that has passed
 
-    public void start() {
+    void start() {
         this.startTime = SystemClock.elapsedRealtime();
         isPaused = false;
     }
 
-    public boolean isPaused() {
+    boolean isPaused() {
         return isPaused;
     }
 
-    public void pause() {
+    void pause() {
         totalTime += SystemClock.elapsedRealtime() - this.startTime;
         isPaused = true;
     }
 
-    public void reset() {
+    void reset() {
         this.totalTime = 0;
         this.startTime = SystemClock.elapsedRealtime();
         isPaused = true;
     }
 
-    public boolean isReset() {
+    boolean isReset() {
         return isPaused && totalTime == 0;
     }
-
 
     public Time getTime() {
         if (!isPaused) {
@@ -68,11 +69,11 @@ public class StopWatch {
         }.start();
     }
 
-    public static class Time {
-        public final int hours;
-        public final int minutes;
-        public final int secs;
-        public final int millisecs;
+    static class Time {
+        final int hours;
+        final int minutes;
+        final int secs;
+        final int millisecs;
 
         Time(int hours, int minutes, int secs, int millisecs) {
             this.hours = hours;
@@ -94,6 +95,7 @@ public class StopWatch {
             return new StopWatch.Time(hours, minutes, secs, ms);
         }
 
+        @SuppressWarnings("unused")
         long toMillis() {
             return millisecs + (secs * 1000) + (minutes * 60 * 1000) + (hours * 60 * 60 * 1000);
         }
@@ -107,6 +109,7 @@ public class StopWatch {
         }
     }
 
+    @SuppressWarnings("unused")
     private static void testForNSeconds(int seconds) {
         long now = SystemClock.elapsedRealtime();
         long end = now + seconds * 1000;
@@ -121,7 +124,6 @@ public class StopWatch {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        // write your code here
         StopWatch clock = new StopWatch();
         System.out.println(clock);
         clock.start();
