@@ -1,10 +1,10 @@
 package com.kataysantos.movementstopwatch;
 
 /**
- * Created by gubatron on 2/5/17.
+ * @author gubatron
+ * @since 02/05/2017
  */
-
-public class StopWatchLoop implements Runnable {
+class StopWatchLoop implements Runnable {
     private final static long SLEEP_TIME = 75;
     private final StopWatch stopWatch;
     private final MainActivity mainActivity;
@@ -23,7 +23,6 @@ public class StopWatchLoop implements Runnable {
                 Thread.sleep(SLEEP_TIME);
                 if (!stopWatch.isPaused()) {
                     mainActivity.updateOnTime(stopWatch.getTime());
-
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -31,7 +30,7 @@ public class StopWatchLoop implements Runnable {
         }
     }
 
-    public void stop() {
+    void stop() {
         running = false;
     }
 }

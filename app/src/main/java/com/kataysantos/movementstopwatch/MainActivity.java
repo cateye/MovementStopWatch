@@ -1,11 +1,7 @@
 package com.kataysantos.movementstopwatch;
 
-
-
-
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -16,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
 
 public class MainActivity extends AppCompatActivity implements StopWatchLoopController {
     private final StopWatch stopWatch = new StopWatch();
@@ -29,12 +24,6 @@ public class MainActivity extends AppCompatActivity implements StopWatchLoopCont
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-
-
-
-
     }
 
     @Override
@@ -56,12 +45,11 @@ public class MainActivity extends AppCompatActivity implements StopWatchLoopCont
     }
 
     private void initComponents() {
-
         clockTextView = (TextView) findViewById(R.id.content_main_text_clock);
         clockTextView.setText(stopWatch.toString());
         ImageView metronomeButton = (ImageView) findViewById(R.id.content_main_metronomeButton);
-        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(100,100);
-        metronomeButton.setLayoutParams(parms);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(100, 100);
+        metronomeButton.setLayoutParams(params);
         ListView listView = (ListView) findViewById(R.id.content_main_listview);
         LapAdapter lapAdapter = new LapAdapter(this);
         Button buttonReset = (Button) findViewById(R.id.content_main_button_reset);
@@ -75,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements StopWatchLoopCont
         buttonReset.setOnClickListener(resetButtonListener);
         buttonLap.setOnClickListener(lapButtonListener);
         metronomeButton.setOnClickListener(metronomeButtonListener);
-
         listView.setAdapter(lapAdapter);
     }
 
@@ -90,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements StopWatchLoopCont
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -104,22 +90,20 @@ public class MainActivity extends AppCompatActivity implements StopWatchLoopCont
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    private static class ResetButtonListener implements  View.OnClickListener{
+    private static class ResetButtonListener implements View.OnClickListener {
 
         private final StopWatch stopWatch;
         private final TextView clockTextView;
         private final StopWatchLoopController loopController;
 
-        ResetButtonListener(StopWatch stopWatch, TextView clockTextView, StopWatchLoopController loopController){
+        ResetButtonListener(StopWatch stopWatch, TextView clockTextView, StopWatchLoopController loopController) {
             this.clockTextView = clockTextView;
             this.stopWatch = stopWatch;
             this.loopController = loopController;
@@ -128,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements StopWatchLoopCont
         @Override
         public void onClick(View v) {
             stopWatch.reset();
-            clockTextView.setText("00:00.0");
+            clockTextView.setText(R.string.stopwatch_reset_value);
             loopController.stopStopWatchLoop();
         }
     }
@@ -160,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements StopWatchLoopCont
 
         @Override
         public void onClick(View v) {
-            if (stopWatch.isReset()){
+            if (stopWatch.isReset()) {
                 stopWatch.warmUp(3900, warmupListener);
                 // TODO: Change color
             } else if (stopWatch.isPaused()) {
@@ -177,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements StopWatchLoopCont
             button.setText(R.string.stop);
         }
 
-        private  void stopLoopAndStopWatch() {
+        private void stopLoopAndStopWatch() {
             stopWatch.pause();
             button.setText(R.string.start);
             loopController.stopStopWatchLoop();
@@ -203,11 +187,11 @@ public class MainActivity extends AppCompatActivity implements StopWatchLoopCont
         }
     }
 
-    private class MetronomeButtonListener implements  View.OnClickListener{
+    private class MetronomeButtonListener implements View.OnClickListener {
 
         private final MainActivity mainActivity;
 
-        public MetronomeButtonListener(MainActivity mainActivity) {
+        MetronomeButtonListener(MainActivity mainActivity) {
             this.mainActivity = mainActivity;
         }
 
