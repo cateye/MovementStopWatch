@@ -179,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements StopWatchLoopCont
             if (stopWatch.isReset()) {
                 stopWatch.warmUp(3900, warmupListener);
                 // TODO: Change color
+
             } else if (stopWatch.isPaused()) {
                 // TODO: Change color
                 startLoopAndStopWatch();

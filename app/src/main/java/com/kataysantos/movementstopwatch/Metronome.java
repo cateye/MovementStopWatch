@@ -8,17 +8,19 @@ import android.media.AudioTrack;
  * @author gubatron
  * @since 02/08/2017
  */
-class Metronome {
+class   Metronome {
     private final int sampleRate = 8000;
     private double freqOfToneInHz;
     private byte[] generatedSnd;
     private double durationInSecs;
     private int playbacks = 0;
+    private AudioTrack audioTrack;
 
     Metronome(double durationInSecs, double freqInHz) {
         this.durationInSecs = durationInSecs;
         this.freqOfToneInHz = freqInHz;
         genTone();
+        audioTrack = genAudioTrack();
     }
 
     private void genTone() {
@@ -49,13 +51,14 @@ class Metronome {
 
     }
 
+
     void play() {
-        AudioTrack audioTrack = genAudioTrack();
         audioTrack.write(generatedSnd, 0, generatedSnd.length);
         try {
             audioTrack.play();
             playbacks++;
             System.out.println("playbacks -> " + playbacks);
+            audioTrack.release();
         } catch (Throwable t) {
             System.out.println("releasing after it failed on playback " + playbacks);
             playbacks = 0;
